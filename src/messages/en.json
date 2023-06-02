@@ -1,0 +1,21 @@
+{
+	"choosePhoto": {
+		"text": "Choose a photo of an eye",
+		"button": "Choose",
+		"notAnImage": "The file you've chosen is not an image",
+		"loadingImage": "Loading..."
+	},
+	"errorPages": {
+		"404": {
+			"title": "Page not found"
+		},
+		"500": {
+			"title": "Error"
+		},
+		"503": {
+			"title": "Offline",
+			"description": "Couldn't connect to the server"
+		},
+		"requestedURL": "Page URL"
+	}
+}

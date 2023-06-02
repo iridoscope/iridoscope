@@ -1,0 +1,36 @@
+.ErrorPage {
+	text-align: center;
+}
+
+.ErrorPage-title {
+	margin-top: calc(var(--unit) * 8);
+	margin-bottom: calc(var(--unit) * 4);
+	font-weight: 300;
+	font-size: 1.8rem;
+}
+
+.ErrorPage-description {
+	margin: 0;
+}
+
+.ErrorPage--showImage .ErrorPage-title {
+	margin-top: calc(var(--unit) * 4);
+}
+
+.ErrorPage-description + .ErrorPage-image {
+	margin-top: calc(var(--unit) * 4);
+}
+
+.ErrorPage-image {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	border: 1px solid rgba(0, 0, 0, 0.5);
+	/* Don't overflow the page on mobile devices. */
+	max-width: 100%;
+}
+
+.ErrorPage-requestedUrl {
+	display: inline-block;
+	margin-top: calc(var(--unit) * 2);
+}

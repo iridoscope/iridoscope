@@ -1,0 +1,14 @@
+@import "../styles/common.css";
+
+.ChoosePhoto {
+	display: flex;
+	justify-content: center;
+}
+
+.ChoosePhoto-preview {
+	/*width: 10rem;*/
+	/*height: 10rem;*/
+	/*object-fit: contain;*/
+	width: 10rem;
+	height: auto;
+}

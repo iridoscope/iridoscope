@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+	<head>
+		<script>
+			// Set your config parameters here.
+			// See the readme for more details.
+			var CONFIG = {}
+		</script>
+		<!-- Apply default configuration -->
+		<script>
+			var DEFAULT_CONFIG = <%= defaultConfiguration %>
+			CONFIG = Object.assign({}, DEFAULT_CONFIG, CONFIG)
+			var BASE_PATH = ''
+			var VERSION = '<%= version %>'
+		</script>
+		<% if (productionBuild) { %>
+		<script>
+			(function () {
+				// <script/> tag attributes.
+				var scriptTagAttributes = <%= JSON.stringify(htmlWebpackPlugin.tags.headTags.find(tag => tag.tagName === 'script').attributes) %>
+
+				// Style <link/> tag attributes.
+				// There seems to be no style `<link/>` tag in development.
+				// There is a style `<link/>` tag in production.
+				var styleLinkTagAttributes = <%= JSON.stringify((htmlWebpackPlugin.tags.headTags.find(tag => tag.tagName === 'link') || { attributes: null }).attributes) %>
+
+				// Add `<script/>` tag.
+				scriptTagAttributes.src = BASE_PATH + scriptTagAttributes.src
+				var script = document.createElement('script')
+				for (var attribute in scriptTagAttributes) {
+					script.setAttribute(attribute, scriptTagAttributes[attribute])
+				}
+				document.head.appendChild(script)
+
+				// Add style `<link rel="stylesheet"/>` tag.
+				if (styleLinkTagAttributes) {
+					styleLinkTagAttributes.href = BASE_PATH + styleLinkTagAttributes.href
+					var styleLink = document.createElement('link')
+					for (var attribute in styleLinkTagAttributes) {
+						styleLink.setAttribute(attribute, styleLinkTagAttributes[attribute])
+					}
+					document.head.appendChild(styleLink)
+				}
+			})()
+		</script>
+		<% } %>
+		<!-- Set `__webpack_public_path__` -->
+		<script>
+			// `__webpack_public_path__` is configured dynamically at runtime.
+			// https://webpack.js.org/guides/public-path/#on-the-fly
+			__webpack_public_path__ = BASE_PATH + '/'
+		</script>
+		<!-- Google Analytics -->
+		<% if (googleAnalytics) { %>
+		<script>
+			if (CONFIG.googleAnalyticsId) {
+				var script = document.createElement('script')
+				script.setAttribute('async', '')
+				script.src = 'https://www.googletagmanager.com/gtag/js?id=' + CONFIG.googleAnalyticsId
+				document.head.appendChild(script)
+				// Standard `gtag` initialization code.
+				// https://developers.google.com/analytics/devguides/collection/gtagjs/
+				window.dataLayer = window.dataLayer || [];
+				function gtag(){dataLayer.push(arguments);}
+				gtag('js', new Date());
+			}
+		</script>
+		<% } %>
+		<title>Иридоскоп</title>
+		<!-- (unrelated) Fixes 4chan.org "403 Forbidden" error when loading images. -->
+		<meta name="referrer" content="no-referrer"/>
+		<!-- UTF-8 setting is required to prevent weird character encoding. -->
+		<meta http-equiv="content-type" content="text/html;charset=utf-8" />
+		<!-- Fix document width for mobile devices. -->
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- Google Fonts. -->
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<!-- Roboto font -->
+		<link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&amp;subset=cyrillic,cyrillic-ext,greek,greek-ext,latin-ext,vietnamese" rel="stylesheet">
+		<!-- Application icon -->
+		<!-- https://evilmartians.com/chronicles/how-to-favicon-in-2021-six-files-that-fit-most-needs -->
+		<link rel="manifest" href="./manifest.webmanifest">
+		<link rel="icon" href="./images/icon/icon-32.png" sizes="any">
+		<link rel="icon" type="image/svg+xml" href="./images/icon/icon.svg">
+		<link rel="apple-touch-icon" href="./images/icon/apple-touch-icon.png">
+	</head>
+	<body>
+	</body>
+</html>

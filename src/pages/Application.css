@@ -1,0 +1,242 @@
+@import "../styles/common.css";
+
+:root {
+	--PageContent-paddingLeft--background: 0px;
+	--HeaderBanner-marginBottom--smallScreen: var(--unit);
+	--HeaderBanner-marginBottom: calc(var(--unit) * 2);
+
+	--CommentText-maxWidth: var(--Text-maxWidth);
+	--CommentText-maxWidth--sidebar: 24em;
+
+	/* These CSS variables are set after mount in `Application.js`. */
+	--Webpage-paddingLeft-width: 0px;
+	--Webpage-paddingRight-width: 0px;
+	--ChannelThreadsSidebarSectionThreadThumbnail-width: 0px;
+}
+
+.Webpage {
+	display: flex;
+	/* For z-index ordering (relative to preloading screen). */
+	/* Otherwise preloading screen will always be above content (even when it's not shown). */
+	position: relative;
+	z-index: 0;
+}
+
+/* Content takes all free space */
+.Webpage-content {
+	position: relative;
+	/* `z-index: 0` resulted in a bug: `.CommentMoreActions` expandable menu
+	   of the last comment was rendered "below" the footer content in terms of `z-index`. */
+	/* z-index: 0; */
+
+	margin-top: var(--Header-height);
+
+	flex-shrink: 0;
+	flex-grow: 1;
+	flex-basis: auto;
+
+	/* Is focusable (for keyboard navigation: page up, page down). */
+	outline: none;
+
+	@mixin m {
+		display: flex;
+		align-items: center;
+		flex-direction: column;
+	}
+}
+
+.Webpage--offline {
+	--Header-height: 0px;
+	.Webpage-contentContainer {
+		margin-left: auto;
+		margin-right: auto;
+	}
+}
+
+.Webpage-contentContainer {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	/* Stretches the page to 100% height. */
+	min-height: 100vh;
+	/* Prevents horizontal overflow. */
+	width: 100%;
+	max-width: 100%;
+	/* `min-width: 0` prevents the page from overflowing
+	   on thread page when there's a long thread title
+	   and is rendered with `white-space: nowrap`. */
+	min-width: 0;
+
+	/* `<BackButton/>` is rendered in `.Webpage-contentContainer` when Threads Sidebar is shown.
+	   That `<BackButton/>` is `position: absolute`. */
+	position: relative;
+}
+
+/*
+.Webpage--channel,
+.Webpage--thread {
+*/
+.Webpage {
+	main {
+		width: 100%;
+		max-width: var(--Content-maxWidth);
+		/* Center horizontally. */
+		margin-left: auto;
+		margin-right: auto;
+	}
+}
+
+/* These two override `padding-left` and `padding-right` on `.Content`. */
+.ThreadPage,
+.ChannelPage {
+	--PageContent-paddingLeft: 0px;
+}
+
+.Content {
+	padding-left: var(--PageContent-paddingLeft);
+	padding-right: var(--PageContent-paddingLeft);
+
+	/* Prevents horizontal overflow of a page. */
+	width: 100%;
+}
+
+.Content--text {
+	width: 100%;
+	max-width: var(--Text-maxWidth);
+}
+
+/*
+.Webpage--contentSections {
+	.Content--background {
+		padding-left: var(--PageContent-paddingLeft--background);
+		padding-right: var(--PageContent-paddingLeft--background);
+	}
+}
+*/
+
+@mixin upto-m {
+	:root {
+		--PageContent-paddingLeft--background: var(--unit);
+	}
+	.Webpage--contentSections {
+		--PageContent-paddingLeft: 0px;
+		.Content--background {
+			--PageContent-paddingLeft:var(--PageContent-paddingLeft--background);
+		}
+		/*
+		If comments don't have any side padding
+		then the root replies branch line would be ineligible
+		because it would be drawn at the very screen edge.
+		This CSS class can be used for styling such special case.
+		*/
+		/*
+		.CommentTree {
+			--comment-tree-root-level-replies-branch-width-factor: 0.75;
+		}
+		*/
+	}
+}
+
+@mixin upto-m {
+	.Sidebar {
+		transform: translateX(100%);
+		/* `box-shadow` is animated at XS-M screen sizes. */
+		transition: transform 160ms ease-out, box-shadow 160ms ease-out;
+		position: fixed;
+		left: 0;
+		top: 0;
+		right: 0;
+		bottom: var(--FooterMenu-height);
+		z-index: var(--sidebar-z-index);
+		/*background-color: var(--Sidebar-backgroundColor--collapsible);*/
+	}
+	.Document--leftHanded {
+		.Sidebar:not(.Sidebar--show) {
+			transform: translateX(-100%);
+		}
+	}
+	/*.light, .dark {
+		--Sidebar-highlightColor-100: var(--Sidebar-highlightColor-100--collapsible);
+		--Sidebar-highlightColor-200: var(--Sidebar-highlightColor-200--collapsible);
+	}*/
+	.Sidebar--show {
+		transform: none;
+	}
+	/* The extra specificity is to override .HomePage__show-channels-list { display: none }. */
+	.HomePage {
+		.HomePage-showChannelsList {
+			display: block !important;
+		}
+	}
+}
+
+@mixin xs-m {
+	.Sidebar {
+		left: auto;
+		/* The Sidebar should have the minimum width of `var(--Window-minWidth--xs)`,
+		   but, at the same time, it shouldn't expand to `width: 100%`. */
+		width: var(--Window-minWidth--xs);
+	}
+	.Document--leftHanded {
+		.Sidebar {
+			right: auto;
+			left: 0;
+		}
+	}
+	.Sidebar--show {
+		/* `box-shadow` adds some extra eligibility but at the same time
+		   it makes the left border stand out a bit more that in turn
+		   makes the move-in/move-out animation a bit more distracting.
+		   The extra eligibility is desireable at screen sizes when
+		   the sidebar is not full-width. Otherwise, it's not required. */
+		box-shadow: 0 0 5px rgba(0,0,0,0.05);
+	}
+}
+
+@mixin upto-s {
+	:root {
+		--Header-height: 0px;
+	}
+}
+
+@mixin l-plus {
+	:root {
+		--FooterMenu-height: 0px;
+	}
+
+	.Sidebar {
+		position: sticky;
+		top: var(--Header-height);
+		min-height: calc(100vh - var(--Header-height));
+		max-height: calc(100vh - var(--Header-height));
+		/* Resets any `transform`/`transition`/`box-shadow`
+		   potentially set on XS-S-size screens. */
+		transform: none;
+		transition: none;
+		box-shadow: none;
+	}
+
+	.Webpage--withLeftSidebar {
+		--CommentText-maxWidth: var(--Text-maxWidth--compact);
+
+		@mixin xxl-plus {
+			--CommentText-maxWidth: var(--Text-maxWidth);
+		}
+	}
+
+	.Footer .MainMenu {
+		display: none;
+	}
+}
+
+.Webpage-headerBanner {
+	margin-bottom: var(--HeaderBanner-marginBottom--smallScreen);
+	@mixin upto-s {
+		--HeaderBanner-marginBottom: var(--HeaderBanner-marginBottom--smallScreen);
+	}
+}
+
+.Webpage-element--fullWidth {
+	margin-left: calc(-1 * var(--Webpage-paddingLeft-width));
+	margin-right: calc(-1 * var(--Webpage-paddingRight-width));
+}

@@ -1,0 +1,37 @@
+@import "../styles/common.css";
+
+:root {
+	--Button-borderRadius: 0.25rem;
+	--Button-paddingLeft: 0.5rem;
+	--Button-paddingTop: 0.5rem;
+	--Button-backgroundColor: var(--Clickable-color);
+	--Button-backgroundColor--active: var(--Clickable-color--active);
+	--Button-borderColor: var(--Clickable-color);
+	--Button-borderColor--active: var(--Button-borderColor);
+	--Button-color: var(--Content-backgroundColor);
+	--Button-color--active: var(--Button-color);
+	--Button-borderWidth: 1px;
+	--Button-letterSpacing: 0.075em;
+	--Button-textTransform: uppercase;
+	--Button-fontWeight: normal;
+}
+
+.Button {
+	border: var(--Button-borderWidth) solid var(--Button-borderColor);
+	border-radius: var(--Button-borderRadius);
+	padding-left: var(--Button-paddingLeft);
+	padding-right: var(--Button-paddingLeft);
+	padding-top: var(--Button-paddingTop);
+	padding-bottom: var(--Button-paddingTop);
+	background-color: var(--Button-backgroundColor);
+	color: var(--Button-color);
+	text-transform: var(--Button-textTransform);
+	letter-spacing: var(--Button-letterSpacing);
+	font-weight: var(--Button-fontWeight);
+
+	&:active {
+		border: var(--Button-borderWidth) solid var(--Button-borderColor--active);
+		background-color: var(--Button-backgroundColor--active);
+		color: var(--Button-color--active);
+	}
+}
